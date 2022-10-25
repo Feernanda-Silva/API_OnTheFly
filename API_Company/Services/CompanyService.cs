@@ -1,4 +1,5 @@
-﻿using API_Company.Models;
+﻿using System.Collections.Generic;
+using API_Company.Models;
 using API_Company.Utils;
 using MongoDB.Driver;
 
@@ -14,5 +15,27 @@ namespace API_Company.Services
             var database = client.GetDatabase(settings.DatabaseName);
             _company = database.GetCollection<Company>(settings.CompanyCollectionName);
         }
+
+
+
+        public Company Create(Company company)
+        {
+            _company.InsertOne(company);
+            return company; 
+        }
+
+        public List<Company> Get() => _company.Find<Company>(company => true).ToList();
+
+        public Company Get(string cnpj) => _company.Find<Company>(company => company.Cnpj == cnpj).FirstOrDefault();
+        public void Update(string cnpj , Company company)
+        {
+            _company.ReplaceOne(company => company.Cnpj == cnpj, company); 
+        }
+
+        public void Remove (Company company) //Remover e colocar na collection delete
+        {
+
+        }
+
     }
 }
