@@ -16,8 +16,6 @@ namespace API_Company.Services
             _company = database.GetCollection<Company>(settings.CompanyCollectionName);
         }
 
-
-
         public Company Create(Company company)
         {
             _company.InsertOne(company);

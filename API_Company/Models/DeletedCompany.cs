@@ -3,9 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace API_Company.Models
 {
-
-
-    public class Company
+    public class DeletedCompany
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
@@ -19,7 +17,7 @@ namespace API_Company.Models
         [StringLength(30)]
         public string NameOpt { get; set; }
         public string DtOpen { get; set; }
-        public bool? Status { get; set; }
+        public bool Status { get; set; }
         public Address Address { get; set; }
 
     }

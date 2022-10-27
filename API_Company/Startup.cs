@@ -40,6 +40,9 @@ namespace API_Company
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             services.AddSingleton<CompanyService>();
+            services.AddSingleton<DeletedCompanyService>();
+            services.AddSingleton<BlockedService>();
+            services.AddSingleton<AddressService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
