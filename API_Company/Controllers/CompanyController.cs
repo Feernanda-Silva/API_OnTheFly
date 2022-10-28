@@ -31,6 +31,8 @@ namespace API_Company.Controllers
         [HttpGet("{cnpj}", Name = "GetCompany")]
         public ActionResult<Company> Get(string cnpj)
         {
+            cnpj = FormatCnpj(cnpj);
+
             var company = _companyService.Get(cnpj);
             if (company == null)
             {
@@ -58,18 +60,18 @@ namespace API_Company.Controllers
                 company.Address = address;
             }
 
+
+            company.Cnpj = FormatCnpj(company.Cnpj);
             var companyCnpj = _companyService.Get(company.Cnpj); //Verificação: Cnpj existente na db
             if (companyCnpj == null)
             {
                 if (CnpjValidator(company.Cnpj) == true)
                 {
-
-
+                    company.Cnpj = FormatCnpj(company.Cnpj);
                     System.TimeSpan tempoAbertura = DateTime.Now.Subtract(DateTime.Parse(company.DtOpen)); //Verificação: Tempo de abertura(6 meses)
 
                     if (tempoAbertura.TotalDays >= 180)
                     {
-
                         if (company.Status == false)
                         {
                             _companyService.Create(company);
@@ -112,7 +114,11 @@ namespace API_Company.Controllers
         [HttpPut]
         public ActionResult<Company> Put(Company company_, string cnpj)
         {
+
+
             var company = _companyService.Get(cnpj);
+            company.Cnpj = FormatCnpj(cnpj);
+
             if (company == null)
             {
                 return NotFound("Não encontrado");
@@ -156,6 +162,8 @@ namespace API_Company.Controllers
         [HttpDelete]
         public ActionResult<Company> Delete(string cnpj)
         {
+            FormatCnpj(cnpj);
+
             Company company = _companyService.Get(cnpj);
             if (company == null)
             {
@@ -223,6 +231,11 @@ namespace API_Company.Controllers
 
             digito = digito + resto.ToString();
             return cnpj.EndsWith(digito);
+        }
+
+        public static string FormatCnpj(string cnpj)
+        {
+            return Convert.ToUInt64(cnpj).ToString(@"00\.000\.000\/0000\-00");
         }
 
     }
